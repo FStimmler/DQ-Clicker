@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contador con JSON en Cookie</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+
+    img:hover {
+      transform: scale(1.05);
+    }
+    .counter {
+      font-size: 24px;
+      margin-top: 10px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Haz clic en la imagen</h1>
+  <img src="https://drive.usercontent.google.com/download?id=1zuU37jEgMSnadKxdR2C_KvhD88CvfdtR&authuser=0" alt="Imagen interactiva" id="clickableImage">
+  <div class="counter">Clicks (Contador 1): <span id="clickCount1">0</span></div>
+  <div class="counter">Reinicios (Contador 2): <span id="clickCount2">0</span></div>
+
+  <script>
+    // Función para guardar datos en una cookie
+    function setCookie(name, value, days) {
+      const date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      const jsonValue = JSON.stringify(value);
+      document.cookie = `${name}=${jsonValue}; expires=${date.toUTCString()}; path=/`;
+    }
+
+    // Función para obtener datos de una cookie
+    function getCookie(name) {
+      const cookies = document.cookie.split('; ');
+      for (let cookie of cookies) {
+        const [key, value] = cookie.split('=');
+        if (key === name) {
+          try {
+            return JSON.parse(value);
+          } catch {
+            return null; // En caso de error en el JSON
+          }
+        }
+      }
+      return null;
+    }
+
+    // Inicialización de los contadores desde la cookie o desde cero
+    const savedData = getCookie('counters') || { count1: 0, count2: 0 };
+    let count1 = savedData.count1; // Contador de clics
+    let count2 = savedData.count2; // Contador de reinicios
+
+    // Referencias a los elementos del DOM
+    const image = document.getElementById('clickableImage');
+    const counterDisplay1 = document.getElementById('clickCount1');
+    const counterDisplay2 = document.getElementById('clickCount2');
+
+    // Actualizar la visualización inicial
+    counterDisplay1.textContent = count1;
+    counterDisplay2.textContent = count2;
+
+    // Manejar clics en la imagen
+    image.addEventListener('click', () => {
+      count1++;
+      if (count1 === 10) {
+        count1 = 0; // Reinicia el primer contador
+        count2++;   // Incrementa el segundo contador
+      }
+
+      // Guardar datos en la cookie
+      setCookie('counters', { count1, count2 }, 7); // Guardar por 7 días
+
+      // Actualizar la visualización
+      counterDisplay1.textContent = count1;
+      counterDisplay2.textContent = count2;
+    });
+  </script>
+</body>
+</html>
