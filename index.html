@@ -3,29 +3,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contador con JSON en Cookie</title>
+  <title>DQ-Clicker LVL: 1</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
       margin: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
     }
-
-    img:hover {
+    .stats {
+      width: 150px;
+      margin-right: 20px;
+      text-align: left;
+    }
+    .stats p {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+    .game-container {
+      text-align: center;
+      flex-grow: 1;
+    }
+    .image-container {
+      position: relative;
+      display: inline-block;
+      width: 300px;
+      height: 300px;
+    }
+    .background-image,
+    .foreground-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .background-image {
+      z-index: 1; /* Imagen de fondo */
+    }
+    .foreground-image {
+      z-index: 2; /* Imagen en la parte superior */
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .foreground-image:hover {
       transform: scale(1.05);
+    }
+    .life-bar-container {
+      width: 300px;
+      height: 20px;
+      background-color: #ddd;
+      border-radius: 10px;
+      margin: 20px auto;
+      overflow: hidden;
+    }
+    .life-bar {
+      width: 100%;
+      height: 100%;
+      background-color: #4caf50;
+      transition: width 0.2s;
     }
     .counter {
       font-size: 24px;
       margin-top: 10px;
       color: #333;
     }
+    .shop {
+      width: 150px;
+      margin-left: 20px;
+      text-align: center;
+    }
+    .shop button {
+      font-size: 16px;
+      padding: 10px 20px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .shop button:disabled {
+      background-color: #aaa;
+      cursor: not-allowed;
+    }
+    .shop button:hover:not(:disabled) {
+      background-color: #0056b3;
+    }
+    .life-bar-text {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      z-index: 2;
+    }
   </style>
 </head>
 <body>
-  <h1>Haz clic en la imagen</h1>
-  <img src="https://i.ibb.co/K6KybV7/Slime.png" alt="Imagen interactiva" id="clickableImage">
-  <div class="counter">Clicks (Contador 1): <span id="clickCount1">0</span></div>
-  <div class="counter">Reinicios (Contador 2): <span id="clickCount2">0</span></div>
+  <div class="stats">
+    <p>EXP: <span id="exp">0</span>/100</p>
+    <p>LVL: <span id="lvl">1</span></p>
+    <p>Gold: <span id="gold">0</span></p>
+  </div>
+  <div class="game-container">
+    <h1>DQ-Clicker</h1>
+    <div class="image-container">
+      <img src="assets/Fondos/f1.png" alt="Fondo" class="background-image">
+      <img src="assets/Enemigos/Slime.png" alt="Imagen interactiva" class="foreground-image" id="clickableImage">
+    </div>
+    <div class="life-bar-container" style="position: relative;">
+      <div class="life-bar-text" id="lifeBarText">HP 100/100</div>
+      <div class="life-bar" id="lifeBar"></div>
+    </div>
+    <div class="counter">Enemies Slayed: <span id="clickCount2">0</span></div>
+  </div>
+  <div class="shop">
+    <button id="buySwordButton" disabled>Buy sword (100 Gold)</button>
+  </div>
 
   <script>
     // Función para guardar datos en una cookie
@@ -52,34 +152,75 @@
       return null;
     }
 
-    // Inicialización de los contadores desde la cookie o desde cero
-    const savedData = getCookie('counters') || { count1: 0, count2: 0 };
-    let count1 = savedData.count1; // Contador de clics
-    let count2 = savedData.count2; // Contador de reinicios
+    // Inicialización de los valores desde la cookie o desde cero
+    const savedData = getCookie('stats') || { life: 100, count2: 0, exp: 0, lvl: 1, gold: 0, sword: false };
+    let { life, count2, exp, lvl, gold, sword } = savedData;
+
+    document.title = "DQ-Clicker LVL: "+lvl;
 
     // Referencias a los elementos del DOM
     const image = document.getElementById('clickableImage');
-    const counterDisplay1 = document.getElementById('clickCount1');
+    const lifeBar = document.getElementById('lifeBar');
     const counterDisplay2 = document.getElementById('clickCount2');
+    const expDisplay = document.getElementById('exp');
+    const lvlDisplay = document.getElementById('lvl');
+    const goldDisplay = document.getElementById('gold');
+    const buySwordButton = document.getElementById('buySwordButton');
+    const lifeBarText = document.getElementById('lifeBarText');
 
     // Actualizar la visualización inicial
-    counterDisplay1.textContent = count1;
+    lifeBar.style.width = `${life}%`;
     counterDisplay2.textContent = count2;
+    expDisplay.textContent = exp;
+    lvlDisplay.textContent = lvl;
+    goldDisplay.textContent = gold;
+    buySwordButton.disabled = sword || gold < 100;
 
-    // Manejar clics en la imagen
+    // Manejar clics en la imagen interactiva (superior)
     image.addEventListener('click', () => {
-      count1++;
-      if (count1 === 10) {
-        count1 = 0; // Reinicia el primer contador
-        count2++;   // Incrementa el segundo contador
+      const damage = sword ? 15 : 10; // Daño dependiendo si se tiene espada
+      life -= damage;
+
+      // Verificar si la vida llega a 0
+      if (life <= 0) {
+        life = 100; // Reinicia la barra de vida
+        exp += Math.floor(Math.random()*9 + 1); // Incrementar EXP con cada clic
+        gold += Math.floor(Math.random()*5); // Incrementar oro con cada clic
+        count2++;   // Incrementa el contador de reinicios
+      }
+      lifeBarText.textContent = `HP ${life}/100`;
+      // Verificar si EXP alcanza el límite
+      if (exp >= 100) {
+        exp -= 100; // Restar EXP al máximo
+        lvl++;      // Incrementar nivel
+        document.title = "DQ-Clicker LVL: "+lvl;
+        gold += 50; // Bonus de oro por subir de nivel
       }
 
+
+      // Actualizar el botón de comprar espada
+      buySwordButton.disabled = sword || gold < 100;
+
       // Guardar datos en la cookie
-      setCookie('counters', { count1, count2 }, 7); // Guardar por 7 días
+      setCookie('stats', { life, count2, exp, lvl, gold, sword }, 7); // Guardar por 7 días
 
       // Actualizar la visualización
-      counterDisplay1.textContent = count1;
+      lifeBar.style.width = `${life}%`;
       counterDisplay2.textContent = count2;
+      expDisplay.textContent = exp;
+      lvlDisplay.textContent = lvl;
+      goldDisplay.textContent = gold;
+    });
+
+    // Manejar clic en el botón de comprar espada
+    buySwordButton.addEventListener('click', () => {
+      if (gold >= 100 && !sword) {
+        gold -= 100; // Descontar oro
+        sword = true; // Adquirir espada
+        buySwordButton.disabled = true; // Desactivar el botón
+        setCookie('stats', { life, count2, exp, lvl, gold, sword }, 7); // Guardar estado
+        goldDisplay.textContent = gold;
+      }
     });
   </script>
 </body>
