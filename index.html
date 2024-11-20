@@ -5,8 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DQ-Clicker LVL: 1</title>
   <style>
+    @font-face {
+    font-family: 'DQ-Font';
+    src: url('fonts/DQ-Font.ttf') format('truetype');
+    }
+    :root {
+    font-family: 'DQ-Font', sans-serif;
+    color: white;
+    }
+
     body {
-      font-family: Arial, sans-serif;
+      background-color: rgb(27, 27, 27);
+      
       margin: 20px;
       display: flex;
       justify-content: space-between;
@@ -32,7 +42,7 @@
       height: 300px;
     }
     .background-image,
-    .foreground-image {
+    .Monster {
       position: absolute;
       top: 0;
       left: 0;
@@ -44,12 +54,12 @@
     .background-image {
       z-index: 1; /* Imagen de fondo */
     }
-    .foreground-image {
+    .Monster {
       z-index: 2; /* Imagen en la parte superior */
       cursor: pointer;
       transition: transform 0.2s;
     }
-    .foreground-image:hover {
+    .Monster:hover {
       transform: scale(1.05);
     }
     .life-bar-container {
@@ -69,7 +79,6 @@
     .counter {
       font-size: 24px;
       margin-top: 10px;
-      color: #333;
     }
     .shop {
       width: 150px;
@@ -99,7 +108,7 @@
       text-align: center;
 
       font-size: 16px;
-      font-weight: bold;
+
       color: #333;
       z-index: 2;
     }
@@ -115,7 +124,10 @@
     <h1>DQ-Clicker</h1>
     <div class="image-container">
       <img src="assets/Fondos/f1.png" alt="Fondo" class="background-image">
-      <img src="assets/Enemigos/Slime.png" alt="Imagen interactiva" class="foreground-image" id="clickableImage">
+      <div id="clickableImage">
+        <img src="assets/Enemigos/Slime.png" alt="Imagen interactiva" class="Monster" id="Slime">
+        <img src="assets/Enemigos/Bat.png" alt="Imagen interactiva" class="Monster" id="bat">
+      </div>
     </div>
     <div class="life-bar-container" style="position: relative;">
       <div class="life-bar-text" id="lifeBarText">HP 100/100</div>
@@ -128,6 +140,15 @@
   </div>
 
   <script>
+    class Monster {
+      constructor(num, name,life) {
+          this.num = num;     // Número identificador del monstruo
+          this.name = name;   // Nombre del monstruo
+          this.life = life;   // Puntos de vida del monstruo
+      }
+    }
+
+
     // Función para guardar datos en una cookie
     function setCookie(name, value, days) {
       const date = new Date();
@@ -153,8 +174,8 @@
     }
 
     // Inicialización de los valores desde la cookie o desde cero
-    const savedData = getCookie('stats') || { life: 100, count2: 0, exp: 0, lvl: 1, gold: 0, sword: false };
-    let { life, count2, exp, lvl, gold, sword } = savedData;
+    const savedData = getCookie('stats') || { count2: 0, exp: 0, lvl: 1, gold: 0, sword: false };
+    let {count2, exp, lvl, gold, sword } = savedData;
 
     document.title = "DQ-Clicker LVL: "+lvl;
 
@@ -168,6 +189,15 @@
     const buySwordButton = document.getElementById('buySwordButton');
     const lifeBarText = document.getElementById('lifeBarText');
 
+    const slime = new Monster(0,'Slime', 100); 
+    const bat = new Monster(1,'Bat', 150);
+
+
+    setMonster(slime.num)
+    actmon=slime;
+    life=100
+    lifeBarText.textContent = `HP ${life}/${actmon.life}`;
+    lifeBar.style.width = `${(life/actmon.life*100)}%`;
     // Actualizar la visualización inicial
     lifeBar.style.width = `${life}%`;
     counterDisplay2.textContent = count2;
@@ -183,12 +213,14 @@
 
       // Verificar si la vida llega a 0
       if (life <= 0) {
-        life = 100; // Reinicia la barra de vida
+        setMonster(bat.num)
+        actmon=bat;
         exp += Math.floor(Math.random()*9 + 1); // Incrementar EXP con cada clic
         gold += Math.floor(Math.random()*5); // Incrementar oro con cada clic
         count2++;   // Incrementa el contador de reinicios
+        life = bat.life; // Reinicia la barra de vida
       }
-      lifeBarText.textContent = `HP ${life}/100`;
+      lifeBarText.textContent = `HP ${life}/${actmon.life}`;
       // Verificar si EXP alcanza el límite
       if (exp >= 100) {
         exp -= 100; // Restar EXP al máximo
@@ -202,10 +234,10 @@
       buySwordButton.disabled = sword || gold < 100;
 
       // Guardar datos en la cookie
-      setCookie('stats', { life, count2, exp, lvl, gold, sword }, 7); // Guardar por 7 días
+      setCookie('stats', {count2, exp, lvl, gold, sword }, 7); // Guardar por 7 días
 
       // Actualizar la visualización
-      lifeBar.style.width = `${life}%`;
+      lifeBar.style.width = `${(life/actmon.life*100)}%`;
       counterDisplay2.textContent = count2;
       expDisplay.textContent = exp;
       lvlDisplay.textContent = lvl;
@@ -222,6 +254,20 @@
         goldDisplay.textContent = gold;
       }
     });
+
+    function setMonster(num){
+      var subs = image.getElementsByClassName('Monster');
+      console.log(subs)
+      console.log(subs.length)
+      for(var i = 0; i < subs.length; i++){
+        var a = subs[i];
+        
+        i != num? a.style.display = 'none':a.style.display = 'block'
+        
+      }
+      
+    }
+
   </script>
 </body>
 </html>
