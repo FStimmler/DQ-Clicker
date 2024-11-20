@@ -1,107 +1,126 @@
     @font-face {
-    font-family: 'DQ-Font';
-    src: url('fonts/DQ-Font.ttf') format('truetype');
+        font-family: 'DQ-Font';
+        src: url('fonts/DQ-Font.ttf') format('truetype');
     }
+
     :root {
-    font-family: 'DQ-Font', sans-serif;
-    color: white;
+        font-family: 'DQ-Font', sans-serif;
+        color: white;
     }
 
     body {
-      background-color: rgb(27, 27, 27);
-      
-      margin: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+        background-color: rgb(27, 27, 27);
+
+        margin: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
     }
+
     .stats {
-      width: 150px;
-      margin-right: 20px;
-      text-align: left;
+        width: 150px;
+        margin-right: 20px;
+        text-align: left;
     }
+
     .stats p {
-      font-size: 18px;
-      margin: 10px 0;
+        font-size: 18px;
+        margin: 10px 0;
     }
+
     .game-container {
-      text-align: center;
-      flex-grow: 1;
+        text-align: center;
+        flex-grow: 1;
     }
+
     .image-container {
-      position: relative;
-      display: inline-block;
-      width: 300px;
-      height: 300px;
+        position: relative;
+        display: inline-block;
+        width: 300px;
+        height: 300px;
     }
+
     .background-image,
     .Monster {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 10px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
     }
+
     .background-image {
-      z-index: 1; /* Imagen de fondo */
+        z-index: 1;
+        /* Imagen de fondo */
     }
+
     .Monster {
-      z-index: 2; /* Imagen en la parte superior */
-      cursor: pointer;
-      transition: transform 0.2s;
+        z-index: 2;
+        /* Imagen en la parte superior */
+        cursor: pointer;
+        transition: transform 0.2s;
     }
+
     .Monster:hover {
-      transform: scale(1.05);
+        transform: scale(1.05);
     }
+
     .life-bar-container {
-      width: 300px;
-      height: 20px;
-      background-color: #ddd;
-      border-radius: 10px;
-      margin: 20px auto;
-      overflow: hidden;
+        width: 300px;
+        height: 20px;
+        background-color: #ddd;
+        border-radius: 10px;
+        margin: 20px auto;
+        overflow: hidden;
     }
+
     .life-bar {
-      width: 100%;
-      height: 100%;
-      background-color: #4caf50;
-      transition: width 0.2s;
+        width: 100%;
+        height: 100%;
+        background-color: #4caf50;
+        transition: width 0.2s;
     }
+
     .counter {
-      font-size: 24px;
-      margin-top: 10px;
+        font-size: 24px;
+        margin-top: 10px;
     }
+
     .shop {
-      width: 150px;
-      margin-left: 20px;
-      text-align: center;
+        width: 150px;
+        margin-left: 20px;
+        text-align: center;
     }
+
     .shop button {
-      font-size: 16px;
-      padding: 10px 20px;
-      border: none;
-      background-color: #007bff;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
+        font-size: 16px;
+        padding: 10px 20px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
     }
+
     .shop button:disabled {
-      background-color: #aaa;
-      cursor: not-allowed;
+        background-color: #aaa;
+        cursor: not-allowed;
     }
+
     .shop button:hover:not(:disabled) {
-      background-color: #0056b3;
+        background-color: #0056b3;
     }
+
     .life-bar-text {
-      position: absolute;
-      width: 100%;
-      text-align: center;
+        position: absolute;
+        width: 100%;
+        text-align: center;
 
-      font-size: 16px;
+        font-size: 16px;
 
-      color: #333;
-      z-index: 2;
+        color: #333;
+        z-index: 2;
     }
