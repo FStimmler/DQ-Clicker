@@ -50,7 +50,7 @@ function getCookie(name) {
  * @type {Hero}
  */
 let theHero; 
-const savedData = getCookie('stats') || { lifeMonster: 100,count2: 0, exp: 0, lvl: 1, gold: 0, sword: false,theHero: new Hero(100,10) };
+const savedData = getCookie('stats') || { lifeMonster,count2: 0, exp: 0, lvl: 1, gold: 0, sword: false,theHero: new Hero(100,10) };
 console.log(savedData);
 ({ lifeMonster,count2, exp, lvl, gold, sword,theHero} = savedData);
 
