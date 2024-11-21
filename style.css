@@ -101,6 +101,43 @@
         text-align: center;
     }
 
+    .spells {
+        width: 150px;
+        margin-left: 20px;
+        text-align: center;
+        justify-content: center; /* Centra los botones horizontalmente */
+        align-items: center; /* Centra los botones verticalmente */
+        display: flex; /* Activa Flexbox */
+        gap: 10px; /* Espacio entre botones */
+        display: flex;
+        justify-content: center; /* Centra horizontalmente los botones */
+        gap: 10px; /* Espaciado entre los botones */
+        margin-top: 20px; /* Espaciado respecto a las barras de vida */
+    }
+
+    .spells button {
+        padding: 0.4rem 0.5rem;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        padding: 10px 20px;
+        font-size: 14px;
+  
+
+    }
+
+    .zoom{
+        width: 11rem;
+    }
+
+    .spells button:disabled {
+        background-color: #aaa;
+        cursor: not-allowed;
+    }
+
     .shop button {
         font-size: 16px;
         padding: 10px 20px;
@@ -111,6 +148,7 @@
         cursor: pointer;
         transition: background-color 0.3s;
     }
+
 
     .shop button:disabled {
         background-color: #aaa;

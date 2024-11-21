@@ -14,9 +14,15 @@ class Monster {
 }
 
 class Hero {
+    static active = null;
     constructor(maxlife,attack) {
         this.maxlife = maxlife;   // Puntos de vida del Heroe
         this.attack = attack;   // Puntos de ataque del Heroe
+        this.activate();
+    }
+    
+    activate(){
+        Hero.active = this;
     }
 }
 
@@ -48,11 +54,15 @@ function getCookie(name) {
 // Inicialización de los valores desde la cookie o desde cero
 /**
  * @type {Hero}
+ * 
  */
-let theHero; 
+let theHero
 const savedData = getCookie('stats') || { lifeMonster: 100,count2: 0, exp: 0, lvl: 1, gold: 0, sword: false,theHero: new Hero(100,10) };
 console.log(savedData);
 ({ lifeMonster,count2, exp, lvl, gold, sword,theHero} = savedData);
+theHero = new Hero(theHero.maxlife,theHero.attack)
+console.log(theHero);
+
 
 document.title = "DQ-Clicker LVL: " + lvl;
 
@@ -75,16 +85,18 @@ const bat = new Monster(1, 'Bat', 150,2);
 
 setMonster(slime.num)
 slime.activate();
+
 lifeMonster = Monster.active.maxlife
 lifeHero = 100
-lifeBarTextMonster.textContent = `Monster HP: ${lifeMonster}/${Monster.active.maxlife}`;
-lifeBarMonster.style.width = `${(lifeMonster / Monster.active.maxlife * 100)}%`;
+updateHealthBars(lifeMonster,lifeHero);
 // Actualizar la visualización inicial
 counterDisplay2.textContent = count2;
 expDisplay.textContent = exp;
 lvlDisplay.textContent = lvl;
 goldDisplay.textContent = gold;
 buySwordButton.disabled = sword || gold < 100;
+
+
 
 // Manejar clics en la imagen interactiva (superior)
 image.addEventListener('click', () => {
@@ -101,8 +113,7 @@ image.addEventListener('click', () => {
         count2++;   // Incrementa el contador de reinicios
         lifeMonster =Monster.active.maxlife; // Reinicia la barra de vida
     }
-    lifeBarTextMonster.textContent = `Monster HP:${lifeMonster}/${Monster.active.maxlife}`;
-    lifeBarTextHero.textContent = `Hero HP:${lifeHero}/${Monster.active.maxlife}`;
+    updateHealthBars(lifeMonster,lifeHero);
     // Verificar si EXP alcanza el límite
     if (exp >= 100) {
         exp -= 100; // Restar EXP al máximo
@@ -119,8 +130,8 @@ image.addEventListener('click', () => {
     setCookie('stats', { count2, exp, lvl, gold, sword,theHero }, 7); // Guardar por 7 días
 
     // Actualizar la visualización
-    lifeBarMonster.style.width = `${(lifeMonster / Monster.active.maxlife * 100)}%`;
-    lifeBarHero.style.width = `${(lifeHero / 100 * 100)}%`;
+    updateHealthBars(lifeMonster,lifeHero);
+    
     counterDisplay2.textContent = count2;
     expDisplay.textContent = exp;
     lvlDisplay.textContent = lvl;
@@ -148,5 +159,20 @@ function setMonster(num) {
         i != num ? a.style.display = 'none' : a.style.display = 'block'
 
     }
+}
 
+function zoom(){
+    lifeMonster = Monster.active.maxlife
+    lifeHero = Hero.active.maxlife
+    updateHealthBars(lifeMonster,lifeHero);
+    
+    alert('You managed to escape and rest in the inn')
+   
+}
+
+function updateHealthBars(lifeMonster,lifeHero){
+    lifeBarTextMonster.textContent = `Monster HP: ${lifeMonster}/${Monster.active.maxlife}`;
+    lifeBarMonster.style.width = `${(lifeMonster / Monster.active.maxlife * 100)}%`;
+    lifeBarTextHero.textContent = `Hero HP:${lifeHero}/${Hero.active.maxlife}`;
+    lifeBarHero.style.width = `${(lifeHero / Hero.active.maxlife * 100)}%`;
 }
