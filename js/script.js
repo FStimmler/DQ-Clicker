@@ -1,8 +1,22 @@
 class Monster {
-    constructor(num, name, life) {
+    static active = null; // Propiedad estática para rastrear el objeto activo
+
+    constructor(num, name, maxlife,attack) {
         this.num = num;     // Número identificador del monstruo
         this.name = name;   // Nombre del monstruo
-        this.life = life;   // Puntos de vida del monstruo
+        this.maxlife = maxlife;   // Puntos de vida del monstruo
+        this.attack = attack;   // Puntos de ataque del monstruo
+    }
+
+    activate() {
+        Monster.active = this; // Establece este objeto como el activo
+    }
+}
+
+class Hero {
+    constructor(maxlife,attack) {
+        this.maxlife = maxlife;   // Puntos de vida del Heroe
+        this.attack = attack;   // Puntos de ataque del Heroe
     }
 }
 
@@ -32,32 +46,40 @@ function getCookie(name) {
 }
 
 // Inicialización de los valores desde la cookie o desde cero
-const savedData = getCookie('stats') || { count2: 0, exp: 0, lvl: 1, gold: 0, sword: false };
-let { count2, exp, lvl, gold, sword } = savedData;
+/**
+ * @type {Hero}
+ */
+let theHero; 
+const savedData = getCookie('stats') || { lifeMonster,count2: 0, exp: 0, lvl: 1, gold: 0, sword: false,theHero: new Hero(100,10) };
+console.log(savedData);
+({ lifeMonster,count2, exp, lvl, gold, sword,theHero} = savedData);
 
 document.title = "DQ-Clicker LVL: " + lvl;
 
 // Referencias a los elementos del DOM
 const image = document.getElementById('clickableImage');
-const lifeBar = document.getElementById('lifeBar');
+const lifeBarMonster = document.getElementById('lifeBarMonster');
+const lifeBarHero = document.getElementById('lifeBarHero');
 const counterDisplay2 = document.getElementById('clickCount2');
 const expDisplay = document.getElementById('exp');
 const lvlDisplay = document.getElementById('lvl');
 const goldDisplay = document.getElementById('gold');
 const buySwordButton = document.getElementById('buySwordButton');
-const lifeBarText = document.getElementById('lifeBarText');
+const lifeBarTextMonster = document.getElementById('lifeBarTextMonster');
+const lifeBarTextHero = document.getElementById('lifeBarTextHero');
 
-const slime = new Monster(0, 'Slime', 100);
-const bat = new Monster(1, 'Bat', 150);
+const slime = new Monster(0, 'Slime', 100,1);
+const bat = new Monster(1, 'Bat', 150,2);
+
 
 
 setMonster(slime.num)
-actmon = slime;
-life = 100
-lifeBarText.textContent = `HP ${life}/${actmon.life}`;
-lifeBar.style.width = `${(life / actmon.life * 100)}%`;
+slime.activate();
+lifeMonster = Monster.active.maxlife
+lifeHero = 100
+lifeBarTextMonster.textContent = `Monster HP: ${lifeMonster}/${Monster.active.maxlife}`;
+lifeBarMonster.style.width = `${(lifeMonster / Monster.active.maxlife * 100)}%`;
 // Actualizar la visualización inicial
-lifeBar.style.width = `${life}%`;
 counterDisplay2.textContent = count2;
 expDisplay.textContent = exp;
 lvlDisplay.textContent = lvl;
@@ -67,24 +89,26 @@ buySwordButton.disabled = sword || gold < 100;
 // Manejar clics en la imagen interactiva (superior)
 image.addEventListener('click', () => {
     const damage = sword ? 15 : 10; // Daño dependiendo si se tiene espada
-    life -= damage;
+    lifeMonster -= theHero.attack;
+    lifeHero -= Monster.active.attack
 
     // Verificar si la vida llega a 0
-    if (life <= 0) {
+    if (lifeMonster <= 0) {
         setMonster(bat.num)
-        actmon = bat;
+        bat.activate();
         exp += Math.floor(Math.random() * 9 + 1); // Incrementar EXP con cada clic
         gold += Math.floor(Math.random() * 5); // Incrementar oro con cada clic
         count2++;   // Incrementa el contador de reinicios
-        life = bat.life; // Reinicia la barra de vida
+        lifeMonster =Monster.active.maxlife; // Reinicia la barra de vida
     }
-    lifeBarText.textContent = `HP ${life}/${actmon.life}`;
+    lifeBarTextMonster.textContent = `Monster HP:${lifeMonster}/${Monster.active.maxlife}`;
+    lifeBarTextHero.textContent = `Hero HP:${lifeHero}/${Monster.active.maxlife}`;
     // Verificar si EXP alcanza el límite
     if (exp >= 100) {
         exp -= 100; // Restar EXP al máximo
         lvl++;      // Incrementar nivel
         document.title = "DQ-Clicker LVL: " + lvl;
-        gold += 50; // Bonus de oro por subir de nivel
+
     }
 
 
@@ -92,10 +116,11 @@ image.addEventListener('click', () => {
     buySwordButton.disabled = sword || gold < 100;
 
     // Guardar datos en la cookie
-    setCookie('stats', { count2, exp, lvl, gold, sword }, 7); // Guardar por 7 días
+    setCookie('stats', { count2, exp, lvl, gold, sword,theHero }, 7); // Guardar por 7 días
 
     // Actualizar la visualización
-    lifeBar.style.width = `${(life / actmon.life * 100)}%`;
+    lifeBarMonster.style.width = `${(lifeMonster / Monster.active.maxlife * 100)}%`;
+    lifeBarHero.style.width = `${(lifeHero / 100 * 100)}%`;
     counterDisplay2.textContent = count2;
     expDisplay.textContent = exp;
     lvlDisplay.textContent = lvl;
@@ -108,7 +133,7 @@ buySwordButton.addEventListener('click', () => {
         gold -= 100; // Descontar oro
         sword = true; // Adquirir espada
         buySwordButton.disabled = true; // Desactivar el botón
-        setCookie('stats', { life, count2, exp, lvl, gold, sword }, 7); // Guardar estado
+        setCookie('stats', { lifeMonster, count2, exp, lvl, gold, sword,theHero }, 7); // Guardar estado
         goldDisplay.textContent = gold;
     }
 });
