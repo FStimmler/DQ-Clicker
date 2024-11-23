@@ -9,13 +9,18 @@
 </head>
 
 <body>
+  <audio id="lvlUpAudio" src="sounds/levelUp.mp3"></audio>
   <div class="stats">
-    <p>EXP: <span id="exp">0</span>/100</p>
+    <p>EXP: <span id="exp">0</span>/<span id="expToLvl" >100</span></p>
     <p>LVL: <span id="lvl">1</span></p>
     <p>Gold: <span id="gold">0</span></p>
   </div>
   <div class="game-container">
     <h1>DQ-Clicker</h1>
+    <div id="upperText">
+      <div class="upperText" id="counter">Enemies Slayed: <span id="clickCount2">0</span></div>
+      <div class="upperText" id="levelUpText">Level Up!!</div>
+    </div>
     <div class="image-container">
       <img src="assets/Fondos/f1.png" alt="Fondo" class="background-image">
       <div id="clickableImage">
@@ -37,7 +42,7 @@
       <button id="spell-sizz" disabled>Sizz (Small Fireball) 2MP</button>
       <button id="spell-bang" disabled>Bang (Small Explotion) 2MP</button>
     </div>
-    <div class="counter">Enemies Slayed: <span id="clickCount2">0</span></div>
+    <!--<div class="counter">Enemies Slayed: <span id="clickCount2">0</span></div> -->
   </div>
   <div class="shop">
     <button id="buySwordButton" disabled>Buy sword (100 Gold)</button>

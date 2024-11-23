@@ -90,9 +90,10 @@
         transition: width 0.2s;
     }    
 
-    .counter {
+    .upperText {
         font-size: 1.5em;
         margin-top: 0.625em;
+        margin-bottom: 0.625em;
     }
 
     .shop {
@@ -168,4 +169,16 @@
 
         color: #333;
         z-index: 2;
+    }
+
+    @keyframes shakeAndColor {
+        0% { transform: translate(0, 0) rotate(0deg); color: #ff0000; }
+        25% { transform: translate(-5px, 5px) rotate(-5deg); color: #00ff00; }
+        50% { transform: translate(5px, -5px) rotate(5deg); color: #0000ff; }
+        75% { transform: translate(-5px, -5px) rotate(-5deg); color: #ffff00; }
+        100% { transform: translate(0, 0) rotate(0deg); color: #ff00ff; }
+    }
+
+    .animated {
+        animation: shakeAndColor 1s ease 3;
     }
