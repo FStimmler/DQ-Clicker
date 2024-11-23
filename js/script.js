@@ -115,6 +115,7 @@ const goldDisplay = document.getElementById('gold');
 const buySwordButton = document.getElementById('buySwordButton');
 const lifeBarTextMonster = document.getElementById('lifeBarTextMonster');
 const lifeBarTextHero = document.getElementById('lifeBarTextHero');
+
 const lvlUpAudio = document.getElementById('lvlUpAudio');
 
 levelUpText.style.display = 'none'
@@ -126,7 +127,6 @@ const chimaera = new Monster(2,'Chimaera',125,1)
 
 pvec = [400,400,200] //Vector de probabilidad segun la zona
 setMonster(slime.num);
-
 
 lifeMonster = Monster.active.maxlife;
 lifeHero = Hero.active.maxlife;
