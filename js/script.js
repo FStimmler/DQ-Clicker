@@ -1,11 +1,12 @@
 class Monster {
     static active = null; // Propiedad estática para rastrear el objeto activo
-
+    static arrayMonsters = [] //Array con todos los monstruos
     constructor(num, name, maxlife,attack) {
         this.num = num;     // Número identificador del monstruo
         this.name = name;   // Nombre del monstruo
         this.maxlife = maxlife;   // Puntos de vida del monstruo
         this.attack = attack;   // Puntos de ataque del monstruo
+        Monster.arrayMonsters[num] = this;
     }
 
     activate() {
@@ -23,6 +24,10 @@ class Hero {
     
     activate(){
         Hero.active = this;
+    }
+    
+    increaseAttack(n){
+        this.attack += n;
     }
 }
 
@@ -78,13 +83,14 @@ const buySwordButton = document.getElementById('buySwordButton');
 const lifeBarTextMonster = document.getElementById('lifeBarTextMonster');
 const lifeBarTextHero = document.getElementById('lifeBarTextHero');
 
+
 const slime = new Monster(0, 'Slime', 100,1);
 const bat = new Monster(1, 'Bat', 150,2);
+const chimaera = new Monster(2,'Chimaera',125,1)
 
+pvec = [400,400,200] //Vector de probabilidad segun la zona
+setMonster(slime.num);
 
-
-setMonster(slime.num)
-slime.activate();
 
 lifeMonster = Monster.active.maxlife
 lifeHero = 100
@@ -100,20 +106,18 @@ buySwordButton.disabled = sword || gold < 100;
 
 // Manejar clics en la imagen interactiva (superior)
 image.addEventListener('click', () => {
-    const damage = sword ? 15 : 10; // Daño dependiendo si se tiene espada
     lifeMonster -= theHero.attack;
     lifeHero -= Monster.active.attack
 
-    // Verificar si la vida llega a 0
+    // Verificar si la vida del monstruo llega a 0
     if (lifeMonster <= 0) {
-        setMonster(bat.num)
-        bat.activate();
+        newEnemy(); //Aparece un nuevo enemigo cuando el anterior muere
         exp += Math.floor(Math.random() * 9 + 1); // Incrementar EXP con cada clic
         gold += Math.floor(Math.random() * 5); // Incrementar oro con cada clic
         count2++;   // Incrementa el contador de reinicios
         lifeMonster =Monster.active.maxlife; // Reinicia la barra de vida
     }
-    updateHealthBars(lifeMonster,lifeHero);
+
     // Verificar si EXP alcanza el límite
     if (exp >= 100) {
         exp -= 100; // Restar EXP al máximo
@@ -122,12 +126,13 @@ image.addEventListener('click', () => {
 
     }
 
+    
 
     // Actualizar el botón de comprar espada
     buySwordButton.disabled = sword || gold < 100;
 
     // Guardar datos en la cookie
-    setCookie('stats', { count2, exp, lvl, gold, sword,theHero }, 7); // Guardar por 7 días
+    setCookie('stats', { count2, exp, lvl, gold, sword,theHero }, 7); 
 
     // Actualizar la visualización
     updateHealthBars(lifeMonster,lifeHero);
@@ -136,30 +141,57 @@ image.addEventListener('click', () => {
     expDisplay.textContent = exp;
     lvlDisplay.textContent = lvl;
     goldDisplay.textContent = gold;
+    
+    //Verifica si la salud del heroe llega a 0
+    if(lifeHero <= 0){
+        death();
+    }
 });
 
 // Manejar clic en el botón de comprar espada
 buySwordButton.addEventListener('click', () => {
     if (gold >= 100 && !sword) {
-        gold -= 100; // Descontar oro
-        sword = true; // Adquirir espada
-        buySwordButton.disabled = true; // Desactivar el botón
-        setCookie('stats', { lifeMonster, count2, exp, lvl, gold, sword,theHero }, 7); // Guardar estado
+        gold -= 100; 
+        sword = true; 
+        buySwordButton.disabled = true; 
+        theHero.increaseAttack(5);
+        setCookie('stats', { lifeMonster, count2, exp, lvl, gold, sword,theHero }, 7); 
         goldDisplay.textContent = gold;
     }
 });
 
 function setMonster(num) {
+
     var subs = image.getElementsByClassName('Monster');
-    console.log(subs)
-    console.log(subs.length)
+
     for (var i = 0; i < subs.length; i++) {
         var a = subs[i];
 
         i != num ? a.style.display = 'none' : a.style.display = 'block'
 
     }
+
+    Monster.arrayMonsters[num].activate();
 }
+
+function newEnemy(){ //Funcion que genera un nuevo enemigo
+    let randNum = Math.ceil((Math.random()*1000))
+    
+    let acum = 0, i=0
+    
+
+    while (acum < randNum){
+        acum += pvec[i] 
+        i++
+
+    }
+    i--;
+
+    setMonster(i);
+
+
+}
+
 
 function zoom(){
     lifeMonster = Monster.active.maxlife
@@ -168,6 +200,16 @@ function zoom(){
     
     alert('You managed to escape and rest in the inn')
    
+}
+
+function death(){
+    lifeMonster = Monster.active.maxlife
+    lifeHero = Hero.active.maxlife
+    updateHealthBars(lifeMonster,lifeHero);
+
+    alert('You died and lost '+Math.floor(gold/2)+' gold');
+    gold -= Math.floor(gold/2)
+    goldDisplay.textContent = gold;
 }
 
 function updateHealthBars(lifeMonster,lifeHero){

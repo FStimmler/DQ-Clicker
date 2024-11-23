@@ -11,21 +11,21 @@
     body {
         background-color: rgb(27, 27, 27);
 
-        margin: 20px;
+        margin: 0.3em;
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
     }
 
     .stats {
-        width: 150px;
-        margin-right: 20px;
+        width: 9.375em;
+        margin-right: 1.25em;
         text-align: left;
     }
 
     .stats p {
-        font-size: 18px;
-        margin: 10px 0;
+        font-size: 1.125em;
+        margin: 0.625em 0;
     }
 
     .game-container {
@@ -36,8 +36,8 @@
     .image-container {
         position: relative;
         display: inline-block;
-        width: 300px;
-        height: 300px;
+        width: 18.75em;
+        height: 18.75em;
     }
 
     .background-image,
@@ -48,7 +48,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        border-radius: 10px;
+        border-radius: 0.625em;
     }
 
     .background-image {
@@ -68,11 +68,11 @@
     }
 
     .life-bar-container {
-        width: 300px;
-        height: 20px;
+        width: 18.75em;
+        height: 1.25em;
         background-color: #ddd;
-        border-radius: 10px;
-        margin: 20px auto;
+        border-radius: 0.625em;
+        margin: 1.25em auto;
         overflow: hidden;
     }
 
@@ -91,28 +91,28 @@
     }    
 
     .counter {
-        font-size: 24px;
-        margin-top: 10px;
+        font-size: 1.5em;
+        margin-top: 0.625em;
     }
 
     .shop {
-        width: 150px;
-        margin-left: 20px;
+        width: 9.375em;
+        margin-left: 1.25em;
         text-align: center;
     }
 
     .spells {
-        width: 150px;
-        margin-left: 20px;
+        width: 9.375em;
+        margin-left: 1.25em;
         text-align: center;
         justify-content: center; /* Centra los botones horizontalmente */
         align-items: center; /* Centra los botones verticalmente */
         display: flex; /* Activa Flexbox */
-        gap: 10px; /* Espacio entre botones */
+        gap: 0.625em; /* Espacio entre botones */
         display: flex;
         justify-content: center; /* Centra horizontalmente los botones */
-        gap: 10px; /* Espaciado entre los botones */
-        margin-top: 20px; /* Espaciado respecto a las barras de vida */
+        gap: 0.625em; /* Espaciado entre los botones */
+        margin-top: 1.25em; /* Espaciado respecto a las barras de vida */
     }
 
     .spells button {
@@ -120,11 +120,11 @@
         border: none;
         background-color: #007bff;
         color: white;
-        border-radius: 5px;
+        border-radius: 0.3125em;
         cursor: pointer;
         transition: background-color 0.3s;
-        padding: 10px 20px;
-        font-size: 14px;
+        padding: 0.625em 1.25em;
+        font-size: 0.875em;
   
 
     }
@@ -139,12 +139,12 @@
     }
 
     .shop button {
-        font-size: 16px;
-        padding: 10px 20px;
+        font-size: 1.0em;
+        padding: 0.625em 1.25em;
         border: none;
         background-color: #007bff;
         color: white;
-        border-radius: 5px;
+        border-radius: 0.3125em;
         cursor: pointer;
         transition: background-color 0.3s;
     }
@@ -164,7 +164,7 @@
         width: 100%;
         text-align: center;
 
-        font-size: 12px;
+        font-size: 0.75em;
 
         color: #333;
         z-index: 2;
