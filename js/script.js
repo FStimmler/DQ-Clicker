@@ -38,6 +38,7 @@ class Hero {
     
     increaseAttack(n){
         this.attack += n;
+        updateStats();
         save();
     }
 
@@ -112,6 +113,7 @@ const expDisplay = document.getElementById('exp');
 const expToLvlDisplay = document.getElementById('expToLvl');
 const lvlDisplay = document.getElementById('lvl');
 const goldDisplay = document.getElementById('gold');
+const AttackStatNum = document.getElementById('AttackStatNum');
 const buySwordButton = document.getElementById('buySwordButton');
 const lifeBarTextMonster = document.getElementById('lifeBarTextMonster');
 const lifeBarTextHero = document.getElementById('lifeBarTextHero');
@@ -131,6 +133,7 @@ setMonster(slime.num);
 lifeMonster = Monster.active.maxlife;
 lifeHero = Hero.active.maxlife;
 updateHealthBars(lifeMonster,lifeHero);
+updateStats();
 // Actualizar la visualización inicial
 counterDisplay2.textContent = count2;
 expDisplay.textContent = theHero.exp;
@@ -255,6 +258,10 @@ function updateHealthBars(lifeMonster,lifeHero){
     lifeBarMonster.style.width = `${(lifeMonster / Monster.active.maxlife * 100)}%`;
     lifeBarTextHero.textContent = `Hero HP:${lifeHero}/${Hero.active.maxlife}`;
     lifeBarHero.style.width = `${(lifeHero / Hero.active.maxlife * 100)}%`;
+}
+
+function updateStats(){
+    AttackStatNum.textContent = Hero.active.attack
 }
 
 function save(){

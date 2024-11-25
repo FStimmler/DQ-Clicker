@@ -18,26 +18,26 @@
     }
 
     .stats {
-        width: 9.375em;
+        width: 14.375em;
         margin-right: 1.25em;
         text-align: left;
     }
 
     .stats p {
-        font-size: 1.125em;
+        font-size: 1.0em;
         margin: 0.625em 0;
     }
 
     .game-container {
         text-align: center;
-        flex-grow: 1;
+
     }
 
     .image-container {
         position: relative;
         display: inline-block;
-        width: 18.75em;
-        height: 18.75em;
+        width: 16.75em;
+        height: 16.75em;
     }
 
     .background-image,
@@ -100,6 +100,7 @@
         width: 9.375em;
         margin-left: 1.25em;
         text-align: center;
+        gap: 0.625em; /* Espaciado entre los botones */
     }
 
     .spells {
@@ -108,10 +109,7 @@
         text-align: center;
         justify-content: center; /* Centra los botones horizontalmente */
         align-items: center; /* Centra los botones verticalmente */
-        display: flex; /* Activa Flexbox */
-        gap: 0.625em; /* Espacio entre botones */
         display: flex;
-        justify-content: center; /* Centra horizontalmente los botones */
         gap: 0.625em; /* Espaciado entre los botones */
         margin-top: 1.25em; /* Espaciado respecto a las barras de vida */
     }
@@ -145,6 +143,8 @@
         border: none;
         background-color: #007bff;
         color: white;
+        margin-top: 1em;
+        margin-right: 2em;
         border-radius: 0.3125em;
         cursor: pointer;
         transition: background-color 0.3s;
